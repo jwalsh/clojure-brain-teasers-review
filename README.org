@@ -1,0 +1,50 @@
+* Clojure Brain Teasers Review
+
+Review and solutions for 'Clojure Brain Teasers' by Alex Miller and Lorilyn Jordan Miller - a collection of 25 puzzles that explore Clojure's quirks and common pitfalls around equality, collections, evaluation, and runtime behavior.
+
+** Overview
+
+This repository contains notes and examples from working through the puzzles in "Clojure Brain Teasers". The book explores common misconceptions and edge cases in Clojure around:
+
+- Basics
+- Collections 
+- Evaluation
+- Runtime and Library
+
+** Structure
+
+#+begin_src
+.
+├── LICENSE
+├── README.org
+├── deps.edn
+└── src/
+    ├── basics/         # Puzzles 1-5 
+    ├── collections/    # Puzzles 6-11
+    ├── evaluation/     # Puzzles 12-17
+    └── runtime/        # Puzzles 18-25
+#+end_src
+
+** Setup
+
+1. Install [[https://clojure.org/guides/install_clojure][Clojure CLI tools]]
+2. Clone this repository 
+3. Run =clj -M:test= to execute tests
+
+** Notes
+
+Each puzzle includes:
+- Original puzzle code
+- Solution and explanation
+- Additional examples and edge cases
+- Related documentation links
+
+** References
+
+- [[https://pragprog.com/titles/mmclobrain][Book Page]]
+- [[https://pragprog.com/titles/mmclobrain/source_code][Official Repository]]
+- [[https://pragprog.com/titles/mmclobrain/errata][Errata]]
+
+** License
+
+This repository is licensed under the Apache License 2.0. See [[file:LICENSE][LICENSE]] for details.

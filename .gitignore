@@ -1,3 +1,4 @@
+# Clojure
 pom.xml
 pom.xml.asc
 *.jar
@@ -6,9 +7,22 @@ pom.xml.asc
 /classes/
 /target/
 /checkouts/
+.lein-*
 .lein-deps-sum
 .lein-repl-history
 .lein-plugins/
 .lein-failures
 .nrepl-port
 .cpcache/
+.clj-kondo/.cache
+.lsp/.cache
+
+# IDE
+.idea/
+*.iml
+.calva/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
