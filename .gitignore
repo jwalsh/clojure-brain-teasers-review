@@ -16,6 +16,7 @@ pom.xml.asc
 .cpcache/
 .clj-kondo/.cache
 .lsp/.cache
+.clj-kondo/
 
 # IDE
 .idea/

@@ -3,7 +3,7 @@
   (:require [clojure.test :as t]))
 
 (def bignum 9223372036854775807)   ;; 2^63 - 1 (max long)
-(def biggernum 9223372036854775808) ;; 2^63
+(def biggernum 9223372036854775808N) ;; 2^63 needs N suffix for BigInt
 
 (defn arithmetic-test-1 
   "Test standard arithmetic that checks for overflow"

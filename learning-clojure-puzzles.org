@@ -1,0 +1,147 @@
+#+TITLE: Learning Clojure Puzzles
+#+SUBTITLE: Like The Little Schemer, but with Clojure Brain Teasers
+#+AUTHOR: Adapted from Alex Miller and Lorilyn Jordan Miller
+#+OPTIONS: toc:3 num:nil ^:nil
+#+PROPERTY: header-args:clojure :results pp :exports both :eval no-export
+#+STARTUP: showall inlineimages
+#+TAGS: puzzle(p) repl(r) concept(c) gotcha(g)
+
+* Preface
+:PROPERTIES:
+:CUSTOM_ID: preface
+:END:
+
+Welcome to a puzzling journey through Clojure's behavior! 
+
+** How to Use This Book                                                  :guide:
+- Press =C-c C-c= to evaluate code blocks
+- Use =TAB= to show/hide sections
+- =C-c C-v t= to tangle code into files
+- Type your answers in the *Your Answer* blocks
+- =M-x org-toggle-visibility= to reveal answers
+
+** Setting up your REPL                                                   :repl:
+#+begin_src clojure :session setup :results silent
+(require '[clojure.test :refer [is are deftest testing]])
+(require '[clojure.string :as str])
+#+end_src
+
+* The First Commandment of Clojure                                    :concept:
+/Understand the difference between values and types./
+
+* Basics
+
+** Puzzle 1: All Things Being Equal                              :puzzle:gotcha:
+:PROPERTIES:
+:EFFORT: 15
+:ID: puzzle-equality
+:END:
+
+*** The Question
+What do these expressions evaluate to?
+
+#+begin_src clojure :session p1 :results output :exports both
+(= 1 1N 1.0 1.0M)
+(== 1 1N 1.0 1.0M)
+#+end_src
+
+*** Your Answer                                                    :interaction:
+Type your predictions here:
+#+begin_example
+(= 1 1N 1.0 1.0M)  ;; => 
+(== 1 1N 1.0 1.0M) ;; => 
+#+end_example
+
+*** Try It!                                                              :repl:
+Experiment in the REPL:
+#+begin_src clojure :session p1 :exports both
+;; Try different combinations:
+(= 1 1N)
+(= 1 1.0)
+(= 1.0 1.0M)
+
+;; What about these?
+(= 42 42.0)
+(== 42 42.0)
+#+end_src
+
+*** The Answer                                                   :answer:hidden:
+#+begin_src clojure :session p1 :results output :exports results
+(println "First expression:")
+(println "(= 1 1N 1.0 1.0M) ;; => false")
+(println "\nSecond expression:")
+(println "(== 1 1N 1.0 1.0M) ;; => true")
+#+end_src
+
+*** Understanding Why                                                 :learning:
+:PROPERTIES:
+:CUSTOM_ID: understanding-equality
+:END:
+
+Let's break it down:
+
+**** Types in Play                                                      :types:
+| Value | Type    | Description          |
+|-------+---------+---------------------|
+| 1     | Long    | 64-bit integer      |
+| 1N    | BigInt  | Arbitrary precision |
+| 1.0   | Double  | Floating point      |
+| 1.0M  | BigDec  | Decimal precision   |
+
+**** The = Operator                                                 :operators:
+- Checks both value /and/ type
+- Never coerces types
+- Returns =false= for different types
+
+**** The == Operator                                               :operators:
+- Checks numeric value
+- Coerces types when possible
+- Works only on numbers
+
+*** Exercises                                                           :drill:
+Try these:
+
+#+begin_src clojure :session p1 :exports both
+;; 1. What happens with strings?
+(= "1" 1)
+
+;; 2. What about keywords?
+(= :1 1)
+
+;; 3. Collections?
+(= [1] '(1))
+#+end_src
+
+*** Test Your Understanding                                              :test:
+#+begin_src clojure :session p1 :results silent
+(deftest equality-tests
+  (testing "numeric equality"
+    (is (false? (= 1 1.0)) "different types")
+    (is (true? (== 1 1.0)) "numeric equivalence"))
+  
+  (testing "collection equality"
+    (is (= [1 2] '(1 2)) "sequential collections")))
+#+end_src
+
+*** Notes                                                          :notes:hide:
+- Common gotcha in numeric comparisons
+- Important for hash keys
+- Consider type-specific comparisons when needed
+
+* Index                                                               :noexport:
+#+begin_src elisp :results raw
+(org-map-entries 
+  (lambda () 
+    (let ((title (org-get-heading t t t t)))
+      (format "- [[#%s][%s]]" 
+              (org-entry-get nil "CUSTOM_ID") 
+              title)))
+  "CUSTOM_ID<>\"\"")
+#+end_src
+
+* Local Variables                                                     :noexport:
+# Local Variables:
+# org-confirm-babel-evaluate: nil
+# org-src-fontify-natively: t
+# org-hide-emphasis-markers: t
+# End:
