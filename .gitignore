@@ -26,4 +26,6 @@ pom.xml.asc
 
 # OS
 .DS_Store
-Thumbs.dbclojure-brain-teasers_B2.0.pdf
+Thumbs.db
+clojure-brain-teasers_B2.0.pdf
+
