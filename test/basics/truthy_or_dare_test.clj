@@ -1,38 +1,79 @@
-(ns basics.truthy-or-dare
-  "Demonstrates truthy/falsy value semantics in Clojure"
-  (:require [clojure.test :as t]))
+(ns basics.truthy-or-dare-test
+  (:require [clojure.test :refer [deftest testing is]]
+            [basics.truthy-or-dare :as sut]))
 
-(defn predicate-tests
-  "Test true? and false? predicates"
-  []
-  [(true? true)           ;; true
-   (true? :sky-is-blue)   ;; false
-   (false? false)         ;; true
-   (false? nil)          ;; false
-   (false? '())          ;; false
-   (false? 0)])          ;; false
+(deftest predicate-test
+  (testing "true? and false? predicates"
+    (is (true? true)
+        "true? true => true")
+    (is (not (true? :sky-is-blue))
+        "true? :sky-is-blue => false")
+    (is (false? false)
+        "false? false => true")
+    (is (not (false? nil))
+        "false? nil => false")
+    (is (not (false? '()))
+        "false? '() => false")
+    (is (not (false? 0))
+        "false? 0 => false")))
 
-(defn conditional-tests
-  "Test truthiness in if expressions"
-  []
-  [(if :keyword "truthy" "falsy")  ;; keywords are truthy
-   (if '() "truthy" "falsy")       ;; empty lists are truthy
-   (if 0 "truthy" "falsy")])       ;; zero is truthy
+(deftest logical-truthiness-test
+  (testing "only false and nil are logically false" 
+    (let [moms-birthday "April 20, 1969"]
+      
+      ;; Using when-not with nil? check
+      (is (= "Happy Birthday Mom!!"
+             (when-not (nil? moms-birthday)
+               "Happy Birthday Mom!!"))
+          "when-not with nil? is verbose")
+      
+      ;; Using when with some? check  
+      (is (= "Happy Birthday Mom!!"
+             (when (some? moms-birthday)
+               "Happy Birthday Mom!!"))
+          "when with some? is clearer")
+      
+      ;; Using when with direct truthiness
+      (is (= "Happy Birthday Mom!!"
+             (when moms-birthday
+               "Happy Birthday Mom!!"))
+          "using value directly as condition is idiomatic"))))(ns basics.truthy-or-dare-test
+  (:require [clojure.test :refer [deftest testing is]]
+            [basics.truthy-or-dare :as sut]))
 
-(comment
-  ;; REPL experiments
-  (true? true)      ;; true
-  (true? :keyword)  ;; false
-  (true? "string")  ;; false
-  
-  (false? false)    ;; true
-  (false? nil)      ;; false
-  (false? 0)        ;; false
-  
-  ;; Only false and nil are logically false
-  (if nil "truthy" "falsy")      ;; "falsy"
-  (if false "truthy" "falsy")    ;; "falsy"
-  (if :keyword "truthy" "falsy") ;; "truthy"
-  
-  ;; Run tests inline
-  (t/run-tests))
+(deftest predicate-test
+  (testing "true? and false? predicates"
+    (is (true? true)
+        "true? true => true")
+    (is (not (true? :sky-is-blue))
+        "true? :sky-is-blue => false")
+    (is (false? false)
+        "false? false => true")
+    (is (not (false? nil))
+        "false? nil => false")
+    (is (not (false? '()))
+        "false? '() => false")
+    (is (not (false? 0))
+        "false? 0 => false")))
+
+(deftest logical-truthiness-test
+  (testing "only false and nil are logically false" 
+    (let [moms-birthday "April 20, 1969"]
+      
+      ;; Using when-not with nil? check
+      (is (= "Happy Birthday Mom!!"
+             (when-not (nil? moms-birthday)
+               "Happy Birthday Mom!!"))
+          "when-not with nil? is verbose")
+      
+      ;; Using when with some? check  
+      (is (= "Happy Birthday Mom!!"
+             (when (some? moms-birthday)
+               "Happy Birthday Mom!!"))
+          "when with some? is clearer")
+      
+      ;; Using when with direct truthiness
+      (is (= "Happy Birthday Mom!!"
+             (when moms-birthday
+               "Happy Birthday Mom!!"))
+          "using value directly as condition is idiomatic"))))
