@@ -10,6 +10,7 @@ clean:	## Remove build artifacts and caches
 	rm -rf .cpcache
 	rm -rf .clj-kondo/.cache
 	rm -rf .lsp/.cache
+	rm -f book-cover.png
 
 test:	## Run tests using Cognitect test runner 
 	clojure -M:test
@@ -45,3 +46,14 @@ help:	## Display this help message
 	@awk -F ':.*?## ' '/^[a-zA-Z_-]+:.*?## / {printf "  $(CYAN)%-12s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 .PHONY: init deps check fmt help
+
+clojure-brain-teasers_B2.0.pdf: ## Clojure Brain Teasers
+	open https://pragprog.com/titles/mmclobrain/clojure-brain-teasers/
+
+book-cover.png: clojure-brain-teasers_B2.0.pdf ## Show the book cover
+	@TMP=$(mktemp)
+	gs -dFirstPage=1 -dLastPage=1 -sDEVICE=pngalpha -o $$TMP.png -r300 $< -q
+	convert $$TMP.png -resize 480x $@
+	rm $$TMP.png
+
+generate-cover: book-cover.png ## Generate the book cover (alias)

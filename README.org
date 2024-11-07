@@ -2,6 +2,9 @@
 
 Review and solutions for 'Clojure Brain Teasers' by Alex Miller and Lorilyn Jordan Miller - a collection of 25 puzzles that explore Clojure's quirks and common pitfalls around equality, collections, evaluation, and runtime behavior.
 
+#+ATTR_HTML: :width 480px
+[[file:book-cover.png]] 
+
 ** Overview
 
 This repository contains notes and examples from working through the puzzles in "Clojure Brain Teasers". The book explores common misconceptions and edge cases in Clojure around:
