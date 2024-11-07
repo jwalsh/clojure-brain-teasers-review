@@ -61,4 +61,4 @@ generate-cover: book-cover.png ## Generate the book cover (alias)
 
 
 qr-code.png: ## Generate terminal and PNG QR codes for the repository URL
-	@gh browse -n | tee >(qrencode -t PNG -o qr-code.png) | qrencode -t UTF8
+	@gh browse -n | tee >(qrencode -t PNG -o $@) | qrencode -t UTF8
