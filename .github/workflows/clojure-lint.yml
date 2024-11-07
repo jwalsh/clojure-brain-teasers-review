@@ -1,0 +1,38 @@
+name: Clojure Lint
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Clojure
+      uses: DeLaGuardo/setup-clojure@12.1
+      with:
+        lein: latest
+        clj-kondo: latest
+    
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/project.clj') }}
+        restore-keys: ${{ runner.os }}-m2
+    
+    - name: Run clj-kondo
+      run: clj-kondo --lint src test
+    
+    - name: Run cljfmt check
+      run: lein cljfmt check
+    
+    - name: Run kibit
+      run: lein kibit
+    
+    - name: Run eastwood
+      run: lein eastwood
