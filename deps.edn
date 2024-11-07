@@ -1,5 +1,10 @@
 {:paths ["src" "test"]
- :deps {org.clojure/clojure {:mvn/version "1.12.0"}}
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+        org.clojure/tools.cli {:mvn/version "1.0.219"}
+        org.clojure/tools.namespace {:mvn/version "1.4.4"}
+        io.github.cognitect-labs/test-runner
+        {:git/url "https://github.com/cognitect-labs/test-runner.git"
+         :sha "OLD-SHA"}}
  :aliases
  {:test
   {:extra-deps {org.clojure/tools.namespace {:mvn/version "1.5.0"}
@@ -7,4 +12,59 @@
                 io.github.cognitect-labs/test-runner
                 {:git/url "https://github.com/cognitect-labs/test-runner.git"
                  :sha "9d36f36ff541dac680a05010e4348c744333f191"}}
-   :main-opts ["-m" "cognitect.test-runner"]}}}
+   :main-opts ["-m" "cognitect.test-runner"]}
+
+  ;; Static analysis and linting
+  :clj-kondo
+  {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}
+   :main-opts ["-m" "clj-kondo.main"]}
+
+  ;; Dependency graph visualization
+  :graph
+  {:extra-deps {org.clojure/tools.deps.graph {:mvn/version "1.1.84"}}
+   :main-opts ["-m" "clojure.tools.deps.graph"]}
+
+  ;; REPL with enhanced capabilities
+  :repl
+  {:extra-deps {nrepl/nrepl {:mvn/version "1.0.0"}
+                cider/cider-nrepl {:mvn/version "0.44.0"}}}
+
+  ;; Code formatting
+  :cljfmt
+  {:extra-deps {cljfmt/cljfmt {:mvn/version "0.9.2"}}
+   :main-opts ["-m" "cljfmt.main"]}
+
+  ;; Dependency version checking
+  :outdated
+  {:extra-deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
+   :main-opts ["-m" "antq.core"]}
+
+  ;; Hot code reloading
+  :hot-load
+  {:extra-deps {org.clojure/tools.namespace {:mvn/version "1.4.4"}}}
+
+  ;; Project scaffolding
+  :new
+  {:extra-deps {com.github.seancorfield/clj-new {:mvn/version "1.2.404"}}
+   :main-opts ["-m" "clj-new.create"]}
+
+  ;; Build tool
+  :build
+  {:deps {io.github.clojure/tools.build {:git/tag "v0.9.6" :git/sha "8e78bcc"}}
+   :ns-default build}
+
+  ;; Socket REPL
+  :socket
+  {:jvm-opts ["-Dclojure.server.repl={:port,5555,:accept,clojure.core.server/repl}"]}
+
+  ;; Portal data visualization
+  :portal
+  {:extra-deps {djblue/portal {:mvn/version "0.51.1"}}}
+
+  ;; Test runner
+  :test-runner
+  {:extra-deps {io.github.cognitect-labs/test-runner
+                {:git/url "https://github.com/cognitect-labs/test-runner.git"
+                 :git/sha "7284cda41fb9edc0f3bc6b6185cfb7138fc8a023"}}
+   :main-opts ["-m" "cognitect.test-runner"]}
+  }}
