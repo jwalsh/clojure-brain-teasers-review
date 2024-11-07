@@ -1,0 +1,88 @@
+#+TITLE: Related Style & Development Resources
+#+AUTHOR: Team Development
+#+DATE: [2024-11-07 Thu]
+
+* Official Clojure Documentation
+- [[https://clojure.org/guides/style][The Official Clojure Style Guide]]
+  - Our guide extends these core principles
+  - Required reading for all team members
+- [[https://clojure.org/guides/learn/syntax][Learn Clojure Syntax Guide]]
+  - Essential reference for newcomers
+  - Covers foundational concepts seen in our codebase
+
+* Community Style Guides
+- [[https://github.com/bbatsov/clojure-style-guide][BBatsov's Clojure Style Guide]]
+  - Comprehensive community standard
+  - Many of our conventions are based on this
+- [[https://guide.clojure.style][Clojure Style Guide by weavejester]]
+  - Additional perspectives on idiomatic Clojure
+  - Good for understanding varied approaches
+
+* Related Internal Documentation
+** Development Guides
+- =doc/development/=
+  - =getting-started.org= - Project setup and onboarding
+  - =testing-guide.org= - Detailed testing practices
+  - =clojure-style.org= - Our style guide (this project's conventions)
+  - =code-review.org= - Code review checklist and process
+
+** Tool Configuration
+- =doc/tooling/=
+  - =linting.org= - Detailed linter configuration guide
+  - =repl-workflow.org= - REPL-driven development practices
+  - =ci-cd.org= - Continuous Integration/Deployment setup
+
+* Important Project Files
+** Configuration Files
+- =.clj-kondo/config.edn= - Linter rules
+- =.cljfmt.edn= - Formatting rules
+- =.github/workflows/clojure-lint.yml= - CI workflow
+- =project.clj= - Project dependencies and plugins
+
+** Example Files
+- =src/basics/truthy_or_dare.clj= - Reference implementation
+- =test/basics/truthy_or_dare_test.clj= - Reference tests
+
+* Additional Resources
+** Books
+- "Clojure Applied" by Ben Vandgrift & Alex Miller
+- "Elements of Clojure" by Zachary Tellman
+
+** Tools Documentation
+- [[https://github.com/clj-kondo/clj-kondo][clj-kondo Documentation]]
+- [[https://github.com/weavejester/cljfmt][cljfmt Documentation]]
+- [[https://github.com/jonase/eastwood][Eastwood Documentation]]
+- [[https://github.com/jonase/kibit][Kibit Documentation]]
+
+** Community Resources
+- [[https://clojureverse.org][ClojureVerse Forums]]
+- [[https://clojurians.slack.com][Clojurians Slack]]
+  - #style channel for style discussions
+  - #beginners for learning resources
+
+* How to Contribute
+** Documentation
+- Submit updates via pull requests
+- Follow org-mode formatting conventions
+- Include examples for new guidelines
+- Cross-reference related documents
+
+** Style Guide Updates
+- Propose changes through RFCs
+- Include rationale and examples
+- Reference community standards
+- Consider backward compatibility
+
+* Version History
+| Date       | Version | Changes                                    |
+|------------+---------+--------------------------------------------|
+| 2024-11-07 | 1.0.0   | Initial documentation structure           |
+|            |         | Based on truthy-or-dare.clj conventions   |
+
+* Notes
+- Our style guide (=clojure-style.org=) takes precedence when it differs from external guides
+- Review these resources when:
+  - Onboarding new team members
+  - Making significant codebase changes
+  - Updating style guidelines
+  - Setting up new Clojure projects

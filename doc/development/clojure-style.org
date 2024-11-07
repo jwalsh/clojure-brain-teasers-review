@@ -1,0 +1,308 @@
+#+TITLE: Clojure Style Guide
+#+AUTHOR: Team Development
+#+DATE: [2024-11-07 Thu]
+#+OPTIONS: toc:3 num:t ^:nil
+#+STARTUP: showall
+#+PROPERTY: header-args:clojure :results silent
+
+* Introduction
+** Purpose
+This style guide codifies the coding standards and practices for our Clojure projects.
+It's based on idiomatic Clojure conventions and our team's experience.
+
+** Scope
+- Applies to all Clojure code in our repositories
+- Test code follows the same guidelines with noted exceptions
+- See [[file:related-resources.org][Related Resources]] for external guides and references
+
+* Project Structure
+** Directory Layout
+#+begin_src text
+project-root/
+├── src/
+│   └── basics/
+│       └── truthy_or_dare.clj
+├── test/
+│   └── basics/
+│       └── truthy_or_dare_test.clj
+├── doc/
+│   └── development/
+├── resources/
+└── project.clj
+#+end_src
+
+** Source Files
+*** Naming Conventions
+- Use lowercase with underscores for files
+- Match namespace structure to directory paths
+- Example: =src/basics/truthy_or_dare.clj=
+
+*** Namespace Organization
+- One primary namespace per file
+- Group related functionality
+- Include namespace docstrings:
+#+begin_src clojure
+(ns basics.truthy-or-dare
+  "Demonstrates truthy/falsy value semantics in Clojure")
+#+end_src
+
+** Test Files
+*** Location and Naming
+- Mirror source file structure under =test/=
+- Append =_test= to filenames
+- Example: =test/basics/truthy_or_dare_test.clj=
+
+*** Test Namespace Structure
+#+begin_src clojure
+(ns basics.truthy-or-dare-test
+  (:require [clojure.test :refer [deftest testing is]]
+            [basics.truthy-or-dare :as sut]))
+#+end_src
+
+* Code Style
+** Formatting
+*** Indentation
+- Use 2 spaces for indentation
+- Align nested forms vertically
+- Example:
+#+begin_src clojure
+(defn test-false-predicate
+  "Test false? predicate"
+  []
+  [(false? false)     ;; true - only false is false
+   (false? nil)       ;; false - even though falsy
+   (false? '())       ;; false - empty list is truthy
+   (false? 0)])       ;; false - numbers are truthy
+#+end_src
+
+*** Line Length
+- Preferred maximum: 80 characters
+- Hard maximum: 100 characters
+- Break long lines at logical points
+
+*** Whitespace
+- One space after fn names
+- No space before closing parentheses
+- Empty line between top-level forms
+- Example:
+#+begin_src clojure
+(defn truthy-test
+  "Test logical truthiness with if"
+  []
+  [(if :keyword "truthy" "falsy")
+   (if '() "truthy" "falsy")
+   (if 0 "truthy" "falsy")])
+#+end_src
+
+** Naming
+*** Functions
+- Use kebab-case
+- Predicates end with ?
+- Clear, descriptive names
+- Example: =test-true-predicate=
+
+*** Variables
+- Use kebab-case
+- Descriptive for public vars
+- Short names okay for locals
+- Example: =moms-birthday=
+
+*** Namespaces
+- Use kebab-case
+- Match filesystem structure
+- Example: =basics.truthy-or-dare=
+
+** Documentation
+*** Docstrings
+- Required for all public vars
+- Concise but complete
+- Example:
+#+begin_src clojure
+(defn test-true-predicate
+  "Test true? predicate"
+  []
+  [(true? true)
+   (true? :sky-is-blue)])
+#+end_src
+
+*** Comments
+- Use ;; for inline comments
+- Align related comments
+- Explain why, not what
+- Example:
+#+begin_src clojure
+(true? true)           ;; true - only true is true
+(true? :sky-is-blue)   ;; false - even though truthy
+#+end_src
+
+* Functions
+** Definition Style
+*** Basic Structure
+#+begin_src clojure
+(defn function-name
+  "Docstring"
+  [args]
+  ;; function body
+  )
+#+end_src
+
+*** Multiple Arities
+#+begin_src clojure
+(defn function-name
+  "Docstring covering all arities"
+  ([x]
+   (function-name x nil))
+  ([x y]
+   ;; implementation
+   ))
+#+end_src
+
+** Return Values
+- Prefer pure functions
+- Return vectors for multiple values
+- Be consistent with nil/false returns
+
+* Testing
+** Test Structure
+*** Basic Test
+#+begin_src clojure
+(deftest predicate-test
+  (testing "true? and false? predicates"
+    (is (true? true)
+        "true? true => true")
+    (is (not (true? :sky-is-blue))
+        "true? :sky-is-blue => false")))
+#+end_src
+
+*** Grouping Tests
+- One =deftest= per logical group
+- Use =testing= for subgroups
+- Clear, descriptive names
+
+*** Assertions
+- One assertion per =is= form
+- Include failure messages
+- Use specific assertions when available
+
+** Test Style
+*** Example Based
+#+begin_src clojure
+(deftest logical-truthiness-test
+  (testing "only false and nil are logically false" 
+    (let [moms-birthday "April 20, 1969"]
+      (is (= "Happy Birthday Mom!!"
+             (when moms-birthday
+               "Happy Birthday Mom!!"))
+          "using value directly as condition is idiomatic"))))
+#+end_src
+
+*** Naming Conventions
+- Test namespace matches source
+- Append -test to test names
+- Descriptive test names
+
+* Idioms
+** Truthiness
+*** Basic Rules
+- Only =false= and =nil= are falsy
+- Everything else is truthy
+- Example:
+#+begin_src clojure
+(if :keyword "truthy" "falsy")  ;; => "truthy"
+(if '() "truthy" "falsy")       ;; => "truthy"
+(if 0 "truthy" "falsy")         ;; => "truthy"
+#+end_src
+
+*** Best Practices
+- Use direct truthiness checks
+- Prefer =when= over =if= for single branch
+- Use =some?= over =nil?= when appropriate
+
+** Error Handling
+*** Prefer
+- Validate early
+- Use spec for validation
+- Return nil for not-found cases
+
+*** Avoid
+- Throwing exceptions for control flow
+- Catching broad exception types
+- Silent failures
+
+* Tools
+** Linting
+*** clj-kondo
+- Run before commits
+- Follow warnings
+- Configure in =.clj-kondo/config.edn=
+
+*** Eastwood
+- Use for additional checks
+- Run in CI pipeline
+- Configure in =project.clj=
+
+** Formatting
+*** cljfmt
+- Run =lein cljfmt fix= before commits
+- Configure in =.cljfmt.edn=
+- Maintain consistent style
+
+** CI Integration
+*** GitHub Actions
+#+begin_src yaml
+name: Clojure Lint
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run clj-kondo
+      run: clj-kondo --lint src test
+#+end_src
+
+* Version Control
+** Commits
+*** Message Format
+#+begin_src text
+type: summary
+
+Detailed description of changes
+#+end_src
+
+*** Types
+- feat: New feature
+- fix: Bug fix
+- docs: Documentation
+- style: Formatting
+- refactor: Code restructure
+- test: Test changes
+
+** Branching
+*** Strategy
+- Feature branches from main
+- PRs require review
+- Squash and merge
+
+*** Naming
+- feature/description
+- fix/issue-reference
+- docs/topic
+
+* Appendix
+** Additional Resources
+- See [[file:related-resources.org][Related Resources]]
+- Official Clojure style guide
+- Community guidelines
+
+** Style Guide Updates
+*** Process
+1. Propose changes
+2. Team review
+3. Update documentation
+4. Communicate changes
+
+*** Version History
+| Date       | Version | Changes                |
+|------------+---------+------------------------|
+| 2024-11-07 | 1.0     | Initial version       |
