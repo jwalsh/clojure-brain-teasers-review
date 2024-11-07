@@ -44,7 +44,7 @@
       (is (= :needle (first results)) "Filter should find :needle")
       (is (= :needle (second results)) "Some should find :needle")
       (is (= results [(first (filter #{:needle} haystack-set))
-                     (some #{:needle} haystack-set)]) "Should match direct filter/some checks"))))
+                      (some #{:needle} haystack-set)]) "Should match direct filter/some checks"))))
 
 ;; Testing predicate behavior
 (deftest predicate-function-test
@@ -54,8 +54,8 @@
       (is (= 1 (first results)) "First odd number should be 1")
       (is (true? (second results)) "Some odd? should return true")
       (is (= results [(first (filter odd? (range 10)))
-                     (some odd? (range 10))]) "Should match direct filter/some checks")))
-  
+                      (some odd? (range 10))]) "Should match direct filter/some checks")))
+
   (testing "Additional predicate properties"
     (is (= (take 5 (filter odd? (range 100)))
            [1 3 5 7 9]) "Should find first 5 odd numbers")

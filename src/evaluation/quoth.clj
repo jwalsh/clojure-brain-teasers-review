@@ -4,9 +4,7 @@
 
 (defn syntax-quote-tests
   []
-  [
-   (= raven "nevermore")
+  [(= raven "nevermore")
    (= 'raven (symbol "raven"))
    (not= 'raven (symbol "user/raven"))
-   (= '(a b c) '(a b c))
-   ])
+   (= '(a b c) '(a b c))])

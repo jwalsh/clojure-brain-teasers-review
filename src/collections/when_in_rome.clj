@@ -13,14 +13,12 @@
   [(= (conj [:colosseum :vatican] :pantheon :trevi-fountain)
       [:colosseum :vatican :pantheon :trevi-fountain])])
 
-
 (defn test-retaining-order
   "Test how map vs mapv return different collection types"
   []
   [(map #(+ % 3) (range 5))    ;; returns a lazy seq
    (mapv #(+ % 3) (range 5))
    (into [] (map #(+ % 3) (range 5)))]) ;; returns a vector
-
 
 (defn test-set-conj
   "Test conj behavior with sets (adds unique elements)"

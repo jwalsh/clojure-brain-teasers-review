@@ -2,18 +2,18 @@
   (:require [clojure.string :as str]))
 
 ;; Example splits showing subtle differences
-(str/split "banana" #"an") 
+(str/split "banana" #"an")
 ;;=> ["b" "" "a"]
 
-(str/split "banana" #"na") 
+(str/split "banana" #"na")
 ;;=> ["ba"]
 
 ;; With limit parameter demonstrations
-(str/split "banana" #"na" 2)  
+(str/split "banana" #"na" 2)
 ;;=> ["ba" "na"]
 
 ;; Using negative limit to keep trailing empty strings
-(str/split "banana" #"na" -1)  
+(str/split "banana" #"na" -1)
 ;;=> ["ba" "" ""]
 
 ;; Split lines example 

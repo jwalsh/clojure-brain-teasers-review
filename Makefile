@@ -1,76 +1,81 @@
-CYAN = \033[36m
-RESET = \033[0m
-CLJ = clj -M
+# Colors
+CYAN      := \033[36m
+GREEN     := \033[32m
+YELLOW    := \033[33m
+RESET     := \033[0m
 
-.PHONY: build clean test repl lint fmt init deps check help cover qr
+# Project structure
+SRC_DIRS  := basics collections evaluation runtime
+PDF       := clojure-brain-teasers_B2.0.pdf
 
-# --- Default ---
-default: help ## Default target shows help
+.PHONY: all clean test repl lint fmt init deps check help cover qr default build outdated
 
-# --- Build ---
-build: test ## Build the project (alias for test)
+default: help ## Show help
 
-# --- Clean ---
-clean: ## Remove build artifacts and caches
-	rm -rf target
-	rm -rf .cpcache
-	rm -rf .clj-kondo/.cache
-	rm -rf .lsp/.cache
-	rm -f book-cover.png
-	rm -f qr-code.png
+all: clean deps check ## Run all main targets
 
-# --- Test ---
-test: ## Run tests using Cognitect test runner
-	$(CLJ):test
+build: test ## Build the project (runs tests)
+	@echo "$(GREEN)Build completed successfully$(RESET)"
 
-# --- REPL ---
-repl: ## Start a Clojure REPL
-	$(CLJ):repl
+clean: ## Clean all build artifacts
+	@echo "$(YELLOW)Cleaning project...$(RESET)"
+	@rm -rf target .cpcache .clj-kondo/.cache .lsp/.cache book-cover.png qr-code.png
+	@echo "$(GREEN)Clean completed$(RESET)"
 
-# --- Lint ---
-lint: ## Run clj-kondo linter
-	$(CLJ):dev:clj-kondo --lint src test
+test: ## Run tests
+	@echo "$(YELLOW)Running tests...$(RESET)"
+	@clj -M:test
 
-# --- Format ---
-fmt: ## Run cljfmt code formatter
-	$(CLJ):dev:cljfmt fix
+repl: ## Start a REPL
+	@echo "$(YELLOW)Starting REPL...$(RESET)"
+	@clj -M:repl
 
-# --- Initialize ---
-init: ## Create initial directory structure for project
-	mkdir -p src/basics
-	mkdir -p src/collections
-	mkdir -p src/evaluation
-	mkdir -p src/runtime
-	mkdir -p test/basics
-	mkdir -p test/collections
-	mkdir -p test/evaluation
-	mkdir -p test/runtime
+lint: ## Run the linter
+	@echo "$(YELLOW)Running linter...$(RESET)"
+	@clj -M:dev clj-kondo --lint src test
 
-# --- Dependencies ---
-deps: ## Install project dependencies
-	clj -P
+fmt: ## Format the code
+	@echo "$(YELLOW)Formatting code...$(RESET)"
+	@clj -M:dev cljfmt fix
 
-# --- Check ---
+outdated: ## Check for outdated dependencies
+	@echo "$(YELLOW)Checking for outdated dependencies...$(RESET)"
+	@clj -M:outdated
+
+init: ## Create project directory structure
+	@echo "$(YELLOW)Creating project structure...$(RESET)"
+	@for dir in $(SRC_DIRS); do \
+		mkdir -p src/$$dir test/$$dir; \
+	done
+	@echo "$(GREEN)Project structure created$(RESET)"
+
+deps: ## Install dependencies
+	@echo "$(YELLOW)Installing dependencies...$(RESET)"
+	@clj -P
+	@echo "$(GREEN)Dependencies installed$(RESET)"
+
 check: lint test ## Run all checks (lint + test)
+	@echo "$(GREEN)All checks passed$(RESET)"
 
-# --- Help ---
-help: ## Display this help message
+book-cover.png: $(PDF) ## Generate book cover from PDF
+	@echo "$(YELLOW)Generating book cover...$(RESET)"
+	@TMP=$$(mktemp) && \
+	gs -dFirstPage=1 -dLastPage=1 -sDEVICE=pngalpha -o $$TMP.png -r300 $< -q && \
+	convert $$TMP.png -resize 480x $@ && \
+	rm $$TMP.png
+	@echo "$(GREEN)Book cover generated$(RESET)"
+
+qr-code.png: ## Generate QR code for repository
+	@echo "$(YELLOW)Generating QR code...$(RESET)"
+	@gh browse -n | tee >(qrencode -t PNG -o $@) | qrencode -t UTF8
+	@echo "$(GREEN)QR code generated$(RESET)"
+
+cover: book-cover.png ## Generate book cover (alias)
+
+qr: qr-code.png ## Generate QR code (alias)
+
+help: ## Show this help
 	@echo 'Usage: make [target]'
 	@echo ''
 	@echo 'Targets:'
 	@awk -F ':.*?## ' '/^[a-zA-Z_-]+:.*?## / {printf "  $(CYAN)%-12s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
-
-# --- Cover ---
-cover: book-cover.png ## Generate the book cover (alias)
-
-book-cover.png: clojure-brain-teasers_B2.0.pdf ## Show the book cover
-	@TMP=$(mktemp); \
-	gs -dFirstPage=1 -dLastPage=1 -sDEVICE=pngalpha -o $$TMP.png -r300 $< -q; \
-	convert $$TMP.png -resize 480x $@; \
-	rm $$TMP.png
-
-# --- QR ---
-qr: qr-code.png ## Generate terminal and PNG QR codes for the repository URL (alias)
-
-qr-code.png: ## Generate a PNG QR code for the repository URL
-	@gh browse -n | tee >(qrencode -t PNG -o $@) | qrencode -t UTF8

@@ -6,7 +6,7 @@
 (deftest overflow-handling
   (testing "regular arithmetic (+)"
     (is (thrown-with-msg? ArithmeticException #"long overflow"
-                         (sut/arithmetic-test-1))
+                          (sut/arithmetic-test-1))
         "should throw ArithmeticException with 'long overflow' message"))
 
   (testing "promoting arithmetic (+')"

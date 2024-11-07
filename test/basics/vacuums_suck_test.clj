@@ -6,11 +6,11 @@
   (testing "empty and returns true (vacuous truth)"
     (is (true? (and))
         "and with no args returns true"))
-  
+
   (testing "every? with empty collection returns true (vacuous truth)"
     (is (true? (every? odd? []))
         "every? with empty collection returns true"))
-  
+
   (testing "empty or returns nil"
     (is (nil? (or))
         "or with no args returns nil")))

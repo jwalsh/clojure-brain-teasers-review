@@ -1,7 +1,7 @@
 (ns collections.off-record)
 
-(defrecord Album 
-  "A record representing a musical album with a name and artist."
+(defrecord Album
+           "A record representing a musical album with a name and artist."
   [name artist])
 
 (def news-of-the-world

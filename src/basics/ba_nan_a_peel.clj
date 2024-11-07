@@ -23,15 +23,15 @@
   ;; REPL experiments
   (= ##NaN ##NaN)   ;; false - NaN never equals itself
   (== ##NaN ##NaN)  ;; false - even with numeric equality
-  
+
   ;; NaN from calculations
   (/ 0.0 0.0)       ;; ##NaN
   (Math/sqrt -1.0)  ;; ##NaN
-  
+
   ;; Map behavior
   (def m {##NaN 100})
   (count m)         ;; 1
   (get m ##NaN)     ;; nil - can't find the key
-  
+
   ;; Run tests inline
   (t/run-tests))

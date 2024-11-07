@@ -1,15 +1,15 @@
 (ns collections.from-thin-air
   "Demonstrates how nil is handled polymorphically by Clojure collection functions,
    creating new collections or acting as empty collections depending on context"
-  (:require 
-    [clojure.string :as str]))
+  (:require
+   [clojure.string :as str]))
 
 (defn test-assoc-nil
   "Tests that assoc on nil creates a new map rather than returning nil.
    Demonstrates polymorphic creation of collections 'from thin air'"
   []
   [(nil? (assoc nil :ex :nihilo))    ;; false - creates map
-   (= {:ex :nihilo} 
+   (= {:ex :nihilo}
       (assoc nil :ex :nihilo))])     ;; new map springs into existence
 
 (defn test-nil-as-empty

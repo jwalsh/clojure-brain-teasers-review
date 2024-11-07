@@ -12,6 +12,6 @@
   [(every? odd? [])]) ;; Returns true due to vacuous truth
 
 (defn test-empty-or
-  "Test or with no arguments" 
+  "Test or with no arguments"
   []
   [(or)]) ;; Returns nil, as or needs at least one truthy value

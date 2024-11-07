@@ -1,6 +1,6 @@
 (ns runtime.partial-recall)
 
-(defn sentence 
+(defn sentence
   "Creates a question asking if the subject is an object.
    Returns a string in the format 'Is subject a object?'"
   [subject object]
@@ -38,7 +38,7 @@
 (def f3 (fn [object] (sentence @(var planet) object)))
 
 ;; Creating function with delay
-(def f4 
+(def f4
   (let [p (delay planet)]
     (fn [object] (sentence @p object))))
 

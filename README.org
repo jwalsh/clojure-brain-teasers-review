@@ -8,7 +8,6 @@ Review and solutions for 'Clojure Brain Teasers' by Alex Miller and Lorilyn Jord
 ** Overview
 
 This repository contains notes and examples from working through the puzzles in "Clojure Brain Teasers". The book explores common misconceptions and edge cases in Clojure around:
-
 - Basics
 - Collections 
 - Evaluation
@@ -21,11 +20,83 @@ This repository contains notes and examples from working through the puzzles in 
 ├── LICENSE
 ├── README.org
 ├── deps.edn
+├── Makefile
 └── src/
     ├── basics/         # Puzzles 1-5 
     ├── collections/    # Puzzles 6-11
     ├── evaluation/     # Puzzles 12-17
     └── runtime/        # Puzzles 18-25
+#+end_src
+
+** Development Workflow
+
+#+begin_src mermaid
+flowchart TB
+    subgraph make["Make Targets"]
+        direction TB
+        init["init\n(create dirs)"]
+        deps["deps\n(install deps)"]
+        clean["clean\n(cleanup)"]
+        check["check\n(lint + test)"]
+        fmt["fmt\n(format code)"]
+        lint["lint\n(clj-kondo)"]
+        test["test\n(run tests)"]
+        repl["repl\n(dev console)"]
+        build["build\n(full build)"]
+        docs["docs\n(cover + qr)"]
+    end
+
+    subgraph deps_edn["deps.edn Aliases"]
+        direction TB
+        test_runner[":test\ncognitect runner"]
+        dev[":dev\ndev tools"]
+        clj_kondo[":clj-kondo\nlinting"]
+        cljfmt[":cljfmt\nformatting"]
+        portal[":portal\ndata viz"]
+        coverage[":coverage\ncode coverage"]
+        graph[":graph\ndep graph"]
+        build_tools[":build\ntools.build"]
+    end
+
+    subgraph workflow["Development Workflow"]
+        direction LR
+        setup["Setup"] --> develop
+        develop["Development"] --> verify
+        verify["Verification"] --> deploy
+        deploy["Deployment"]
+    end
+
+    %% Connections to workflow stages
+    init --> setup
+    deps --> setup
+    
+    repl --> develop
+    fmt --> develop
+    portal --> develop
+    
+    lint --> verify
+    test --> verify
+    check --> verify
+    coverage --> verify
+    
+    build --> deploy
+    graph --> deploy
+
+    %% Alias connections
+    test --> test_runner
+    fmt --> cljfmt
+    lint --> clj_kondo
+    repl --> dev
+    build --> build_tools
+
+    classDef default fill:#f9f9f9,stroke:#333,stroke-width:1px;
+    classDef workflow fill:#d4e6f1,stroke:#2874a6,stroke-width:2px;
+    classDef make fill:#e8f5e9,stroke:#2e7d32,stroke-width:1px;
+    classDef deps fill:#fff3e0,stroke:#ef6c00,stroke-width:1px;
+    
+    class workflow workflow;
+    class make,init,deps,clean,check,fmt,lint,test,repl,build,docs make;
+    class deps_edn,test_runner,dev,clj_kondo,cljfmt,portal,coverage,graph,build_tools deps;
 #+end_src
 
 ** Setup
@@ -34,7 +105,28 @@ This repository contains notes and examples from working through the puzzles in 
 
 1. Install [[https://clojure.org/guides/install_clojure][Clojure CLI tools]]
 2. Clone this repository 
-3. Run =clj -M:test= to execute tests
+3. Initialize the project structure:
+   #+begin_src shell
+   make init
+   #+end_src
+4. Install dependencies:
+   #+begin_src shell
+   make deps
+   #+end_src
+
+** Development Commands
+
+| Command      | Description                    | Alias          |
+|-------------+--------------------------------+----------------|
+| ~make init~  | Create project structure       | -              |
+| ~make deps~  | Install dependencies           | ~clj -P~       |
+| ~make test~  | Run tests                      | ~clj -M:test~  |
+| ~make repl~  | Start REPL                     | ~clj -M:repl~  |
+| ~make lint~  | Run linter                     | ~clj -M:lint~  |
+| ~make fmt~   | Format code                    | ~clj -M:fmt~   |
+| ~make check~ | Run all checks                 | -              |
+| ~make build~ | Build project                  | -              |
+| ~make help~  | Show available commands        | -              |
 
 ** Notes
 

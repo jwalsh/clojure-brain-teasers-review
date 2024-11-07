@@ -15,10 +15,10 @@
 ;;=> double
 
 ;; Function showing proper type hints
-(defn double-doubler 
- "Doubles a double value, demonstrating proper type hints"
- ^double [^double x]
- (* 2 x))
+(defn double-doubler
+  "Doubles a double value, demonstrating proper type hints"
+  ^double [^double x]
+  (* 2 x))
 
 ;; Example usage with reflection warnings enabled
 (set! *warn-on-reflection* true)
@@ -50,14 +50,14 @@
 
 ;; Array type hints
 (defn sum-array ^double [^doubles arr]
- (areduce arr i ret 0.0
-          (+ ret (aget arr i))))
+  (areduce arr i ret 0.0
+           (+ ret (aget arr i))))
 
 ;; Class type hints
 (defn string-length ^long [^String s]
- (.length s))
+  (.length s))
 
 ;; Show reflection warnings
 (defn no-hints [x]
- (.length x))
+  (.length x))
 ;; Reflection warning, call to length can't be resolved.

@@ -14,7 +14,7 @@
       output)))
 
 ;; Test cases for doubled
-(doubled 3)  
+(doubled 3)
 ;;=> (0 0 1 1 2 2)
 
 ;; This will cause stack overflow
@@ -78,7 +78,7 @@
   (let [result (doubled-take2 100000)]
     (println "Length:" (count result))
     (println "First few elements:" (take 6 result)))
-  
+
   (println "\nTesting doubled with small n (large n would overflow):")
   (let [result (doubled 100)]
     (println "Length:" (count result))

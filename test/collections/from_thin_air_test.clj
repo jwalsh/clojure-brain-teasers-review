@@ -12,7 +12,7 @@
 
 (deftest test-nil-as-empty-test
   (testing "nil acts as empty collection"
-    (let [[cnt nth1 nth2 get-val contains-val first-val rest-val] 
+    (let [[cnt nth1 nth2 get-val contains-val first-val rest-val]
           (sut/test-nil-as-empty)]
       (is (zero? cnt) "count of nil is 0")
       (is (nil? nth1) "nth returns nil for any index")

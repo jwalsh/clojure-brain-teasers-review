@@ -3,8 +3,8 @@
 (def my-msgs
   "A map representing different types of notifications with selectively 
    discarded entries using the `#_` reader macro."
-  {:emails [[:from "boss"] [:from "mom"] #_ [:from "Nigerian Prince"] #_ [:from "LinkedIn"]]
-   :discord-msgs {"Clojure Camp" 6 #_ "Heart of Clojure" #_ 3 "DungeonMasters" 20}
+  {:emails [[:from "boss"] [:from "mom"] #_[:from "Nigerian Prince"] #_[:from "LinkedIn"]]
+   :discord-msgs {"Clojure Camp" 6 #_"Heart of Clojure" #_3 "DungeonMasters" 20}
    :voicemails ["Your voicemail box is full."]})
 
 (defn unread

@@ -5,9 +5,9 @@
 
 (deftest equality-comparisons
   (testing "strict equality with = operator"
-    (is (false? (sut/strict-equality)) 
+    (is (false? (sut/strict-equality))
         "= should return false when comparing different numeric types"))
-  
+
   (testing "numeric equality with == operator"
     (is (true? (sut/numeric-equality))
         "== should return true when comparing equivalent numeric values")))

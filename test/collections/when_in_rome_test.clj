@@ -30,7 +30,7 @@
             "mapv returns vector")
         (is (vector? into-result)
             "into [] returns vector"))
-      
+
       (testing "expected transformed values"
         (is (= '(3 4 5 6 7) lazy-result)
             "map transforms values lazily")
@@ -47,7 +47,7 @@
             "all unique elements added")
         (is (every? sight-set [:colosseum :vatican :pantheon :trevi-fountain])
             "contains all sights regardless of order"))
-      
+
       (testing "number set with duplicates"
         (is (= #{1 2 3 4} num-set)
             "duplicates are ignored")
