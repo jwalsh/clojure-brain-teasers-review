@@ -31,72 +31,71 @@ This repository contains notes and examples from working through the puzzles in 
 ** Development Workflow
 
 #+begin_src mermaid
-flowchart TB
-    subgraph make["Make Targets"]
-        direction TB
-        init["init\n(create dirs)"]
-        deps["deps\n(install deps)"]
-        clean["clean\n(cleanup)"]
-        check["check\n(lint + test)"]
-        fmt["fmt\n(format code)"]
-        lint["lint\n(clj-kondo)"]
-        test["test\n(run tests)"]
-        repl["repl\n(dev console)"]
-        build["build\n(full build)"]
-        docs["docs\n(cover + qr)"]
-    end
+  flowchart TB
+      subgraph make["Make Targets"]
+          direction TB
+          init["init\n(create dirs)"]
+          deps["deps\n(install deps)"]
+          clean["clean\n(cleanup)"]
+          check["check\n(lint + test)"]
+          fmt["fmt\n(format code)"]
+          lint["lint\n(clj-kondo)"]
+          test["test\n(run tests)"]
+          repl["repl\n(dev console)"]
+          build["build\n(full build)"]
+          docs["docs\n(cover + qr)"]
+      end
 
-    subgraph deps_edn["deps.edn Aliases"]
-        direction TB
-        test_runner[":test\ncognitect runner"]
-        dev[":dev\ndev tools"]
-        clj_kondo[":clj-kondo\nlinting"]
-        cljfmt[":cljfmt\nformatting"]
-        portal[":portal\ndata viz"]
-        coverage[":coverage\ncode coverage"]
-        graph[":graph\ndep graph"]
-        build_tools[":build\ntools.build"]
-    end
+      subgraph deps_edn["deps.edn Aliases"]
+          direction TB
+          test_runner[":test\ncognitect"]
+          dev[":dev\ntools"]
+          clj_kondo[":lint\nkondo"]
+          cljfmt[":fmt\ncljfmt"]
+          portal[":portal\nviz"]
+          coverage[":test\ncoverage"]
+          deps_graph[":graph\ndeps"]
+          build_tools[":build\ntools"]
+      end
 
-    subgraph workflow["Development Workflow"]
-        direction LR
-        setup["Setup"] --> develop
-        develop["Development"] --> verify
-        verify["Verification"] --> deploy
-        deploy["Deployment"]
-    end
+      subgraph workflow["Development Workflow"]
+          direction LR
+          setup --> develop
+          develop --> verify
+          verify --> deploy
+      end
 
-    %% Connections to workflow stages
-    init --> setup
-    deps --> setup
-    
-    repl --> develop
-    fmt --> develop
-    portal --> develop
-    
-    lint --> verify
-    test --> verify
-    check --> verify
-    coverage --> verify
-    
-    build --> deploy
-    graph --> deploy
+      %% Stage connections
+      init --> setup
+      deps --> setup
+      
+      repl --> develop
+      fmt --> develop
+      portal --> develop
+      
+      lint --> verify
+      test --> verify
+      check --> verify
+      coverage --> verify
+      
+      build --> deploy
+      deps_graph --> deploy
 
-    %% Alias connections
-    test --> test_runner
-    fmt --> cljfmt
-    lint --> clj_kondo
-    repl --> dev
-    build --> build_tools
+      %% Tool connections 
+      test --> test_runner
+      fmt --> cljfmt
+      lint --> clj_kondo
+      repl --> dev
+      build --> build_tools
 
-    classDef default fill:#f9f9f9,stroke:#333,stroke-width:1px;
-    classDef workflow fill:#d4e6f1,stroke:#2874a6,stroke-width:2px;
-    classDef make fill:#e8f5e9,stroke:#2e7d32,stroke-width:1px;
-    classDef deps fill:#fff3e0,stroke:#ef6c00,stroke-width:1px;
-    
-    class workflow workflow;
-    class make,init,deps,clean,check,fmt,lint,test,repl,build,docs make;
-    class deps_edn,test_runner,dev,clj_kondo,cljfmt,portal,coverage,graph,build_tools deps;
+      classDef default fill:#f9f9f9,stroke:#333,stroke-width:1px
+      classDef workflow fill:#d4e6f1,stroke:#2874a6,stroke-width:2px
+      classDef make fill:#e8f5e9,stroke:#2e7d32,stroke-width:1px
+      classDef deps fill:#fff3e0,stroke:#ef6c00,stroke-width:1px
+
+      class workflow workflow
+      class make,init,deps,clean,check,fmt,lint,test,repl,build,docs make
+      class deps_edn,test_runner,dev,clj_kondo,cljfmt,portal,coverage,deps_graph,build_tools deps
 #+end_src
 
 ** Setup
