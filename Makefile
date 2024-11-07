@@ -11,6 +11,7 @@ clean:	## Remove build artifacts and caches
 	rm -rf .clj-kondo/.cache
 	rm -rf .lsp/.cache
 	rm -f book-cover.png
+	rm -f qr-code.png
 
 test:	## Run tests using Cognitect test runner 
 	clojure -M:test
@@ -57,3 +58,7 @@ book-cover.png: clojure-brain-teasers_B2.0.pdf ## Show the book cover
 	rm $$TMP.png
 
 generate-cover: book-cover.png ## Generate the book cover (alias)
+
+
+qr-code.png: ## Generate terminal and PNG QR codes for the repository URL
+	@gh browse -n | tee >(qrencode -t PNG -o qr-code.png) | qrencode -t UTF8

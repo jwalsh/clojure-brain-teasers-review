@@ -30,6 +30,8 @@ This repository contains notes and examples from working through the puzzles in 
 
 ** Setup
 
+[[file:qr-code.png]]
+
 1. Install [[https://clojure.org/guides/install_clojure][Clojure CLI tools]]
 2. Clone this repository 
 3. Run =clj -M:test= to execute tests
