@@ -1,0 +1,141 @@
+#+TITLE: Clojure Development Knowledge Requirements
+#+DATE: [2024-11-07 Thu]
+#+AUTHOR: J Walsh
+#+PROPERTY: header-args:shell :results output :exports both
+#+PROPERTY: header-args:clojure :results output :exports both
+
+* Overview
+:PROPERTIES:
+:header-args: :tangle no
+:END:
+
+Stable toolchain snapshot from initial project setup.
+
+** Tool Versions
+#+begin_src shell :results output :cache yes
+clojure -Sdeps '{:deps {org.clojure/tools.deps.alpha {:mvn/version "0.15.1254"}}}' \
+-T:build tool-versions
+#+end_src
+
+#+begin_src shell :results output :cache yes
+make --version
+git --version
+gh --version
+#+end_src
+
+** Dependency Tree
+#+begin_src clojure :results output :cache yes
+(require '[clojure.tools.deps.graph :as graph])
+(graph/print (graph/deps-graph {:aliases [:dev :test]}))
+#+end_src
+
+* Core Knowledge Requirements
+** Clojure Fundamentals
+*** Language Core [4-6 weeks]
+- Syntax & data structures
+- Namespaces & deps
+- REPL workflow
+- Java interop
+
+*** Development Environment [2-3 weeks]
+#+begin_src shell :results output table
+nix-shell --version
+clj -Stree
+#+end_src
+
+** Build Tools [2-3 weeks]
+*** Make
+#+begin_src makefile :tangle Makefile.versions
+VERSION_CLOJURE := 1.11.1
+VERSION_DEPS := 0.16.1281
+VERSION_KONDO := 2023.05.18
+VERSION_CLJFMT := 0.9.2
+
+.PHONY: versions
+versions:
+	@echo "Clojure: $(VERSION_CLOJURE)"
+	@echo "tools.deps: $(VERSION_DEPS)"
+	@echo "clj-kondo: $(VERSION_KONDO)"
+	@echo "cljfmt: $(VERSION_CLJFMT)"
+#+end_src
+
+*** deps.edn
+#+begin_src clojure :tangle .versions/deps.edn
+{:versions
+ {"org.clojure/clojure" "1.11.1"
+  "org.clojure/tools.deps" "0.16.1281"
+  "clj-kondo/clj-kondo" "2023.05.18"
+  "cljfmt/cljfmt" "0.9.2"
+  "io.github.cognitect-labs/test-runner" {:git/tag "v0.5.1"
+                                         :git/sha "dfb30dd6605cb6c0efc275e1df1736f6e90d4d73"}}}
+#+end_src
+
+** Development Tools [2-3 weeks]
+*** Code Quality
+- clj-kondo configuration
+- cljfmt rules
+- Editor integration
+
+*** Testing Framework
+#+begin_src clojure :tangle test/versions_test.clj
+(ns versions-test
+  (:require [clojure.test :refer :all]
+            [clojure.edn :as edn]))
+
+(deftest version-consistency-test
+  (let [versions (edn/read-string (slurp ".versions/deps.edn"))]
+    (is (= "1.11.1" (get-in versions [:versions "org.clojure/clojure"])))))
+#+end_src
+
+* Learning Timeline
+** Essential (Week 1)
+- REPL basics
+- deps.edn management
+- Basic Git workflow
+- Make targets
+
+** Development (Weeks 2-4)
+- Code quality tools
+- Testing framework
+- Basic CI setup
+- Development workflow
+
+** Advanced (Months 2-3)
+- Nix environment
+- Performance tuning
+- Custom tooling
+- Team workflows
+
+* Tool Chain Verification
+#+begin_src shell :tangle scripts/verify-toolchain.sh :shebang "#!/usr/bin/env bash"
+# Verify core tools
+echo "=== Core Tools ==="
+clojure -Sdescribe
+make --version
+git --version
+gh --version
+
+# Verify Clojure tools
+echo -e "\n=== Clojure Tools ==="
+clj -M:dev -Stree
+clj -M:test -Stree
+
+# Verify development environment
+echo -e "\n=== Environment ==="
+nix-shell --version
+#+end_src
+
+* References
+- [[https://clojure.org/guides/deps_and_cli][Clojure CLI Guide]]
+- [[https://practical.li/clojure/][Practical.li]]
+- [[https://github.com/clojure/tools.deps.graph][tools.deps.graph]]
+- [[https://nixos.org/manual/nix/stable/][Nix Manual]]
+
+* Footnotes
+:PROPERTIES:
+:header-args: :tangle no
+:END:
+
+This document generated: {{{time(%Y-%m-%d %H:%M:%S)}}}
+Tool versions captured: {{{time(%Y-%m-%d)}}}
+Environment: {{{results(shell "uname -sr")}}}
