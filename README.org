@@ -113,19 +113,112 @@ This repository contains notes and examples from working through the puzzles in 
    make deps
    #+end_src
 
-** Development Commands
+** Development Tools
 
-| Command      | Description                    | Alias          |
-|-------------+--------------------------------+----------------|
-| ~make init~  | Create project structure       | -              |
-| ~make deps~  | Install dependencies           | ~clj -P~       |
-| ~make test~  | Run tests                      | ~clj -M:test~  |
-| ~make repl~  | Start REPL                     | ~clj -M:repl~  |
-| ~make lint~  | Run linter                     | ~clj -M:lint~  |
-| ~make fmt~   | Format code                    | ~clj -M:fmt~   |
-| ~make check~ | Run all checks                 | -              |
-| ~make build~ | Build project                  | -              |
-| ~make help~  | Show available commands        | -              |
+*** Configuration
+**** Org Babel
+#+begin_src emacs-lisp :results silent
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((clojure . t)
+   (shell . t)
+   (emacs-lisp . t)))
+
+(setq org-babel-clojure-backend 'cider
+      org-confirm-babel-evaluate nil
+      org-src-preserve-indentation t
+      org-babel-default-header-args
+      '((:mkdirp . "yes")
+        (:tangle . "yes")
+        (:comments . "org")))
+#+end_src
+
+*** Installation
+**** Using Homebrew
+#+begin_src shell
+brew install clojure make git imagemagick ghostscript qrencode gh
+#+end_src
+
+**** Using Nix
+#+begin_src nix :tangle shell.nix :mkdirp yes
+{ pkgs ? import <nixpkgs> {} }:
+
+pkgs.mkShell {
+  buildInputs = with pkgs; [
+    clojure
+    gnumake
+    git
+    ghostscript
+    imagemagick
+    qrencode
+    gh
+  ];
+}
+#+end_src
+
+*** Development Environment 
+**** Core Tools
+| Tool         | Purpose                     | Version |
+|--------------+-----------------------------+---------|
+| ~clojure~     | Clojure CLI & deps         | 1.11.1  |
+| ~make~        | Build automation            | 4.4+    |
+| ~git~         | Version control             | 2.39+   |
+| ~ghostscript~ | PDF processing              | 10.0+   |
+| ~imagemagick~ | Image manipulation          | 7.1+    |
+| ~qrencode~    | QR code generation          | 4.1+    |
+| ~gh~          | GitHub CLI                  | 2.39+   |
+
+**** Clojure Tools
+| Tool          | Purpose                      | Config        |
+|---------------+------------------------------+---------------|
+| ~clj-kondo~    | Static analysis              | ~:dev~         |
+| ~cljfmt~       | Code formatting              | ~:dev~         |
+| ~test-runner~  | Test execution               | ~:test~        |
+| ~portal~       | Data visualization           | ~:dev~         |
+| ~tools.build~  | Build tooling                | ~:build~       |
+| ~antq~         | Dependency management        | ~:outdated~    |
+
+*** Workflow Commands
+**** Basic Development
+#+begin_src shell
+# Initial setup
+make deps              # Install dependencies
+make init              # Create project structure
+
+# Development cycle
+make repl              # Start development REPL
+make test              # Run test suite
+make fmt               # Format code
+make lint              # Run linter
+make check            # Run all checks
+#+end_src
+
+**** Documentation
+#+begin_src shell
+# Generate documentation assets
+make cover            # Create book cover from PDF
+make qr               # Generate repository QR code
+#+end_src
+
+**** Version Control
+#+begin_src shell
+# Setup Git hooks
+git config core.hooksPath .githooks
+chmod +x .githooks/*
+#+end_src
+
+*** Version Requirements
+#+begin_src clojure :tangle deps.edn :mkdirp yes
+{:min-versions
+ {"org.clojure/clojure" "1.11.1"
+  "org.clojure/tools.deps" "0.16.1281"}}
+#+end_src
+
+*** Community Resources
+- [[https://clojure.org/guides/deps_and_cli][Clojure CLI Guide]]
+- [[https://practical.li/clojure/][Practical.li Clojure]]
+- [[https://clojure.org/guides/tools_build][tools.build Guide]]
+- [[https://book.babashka.org/][Babashka Book]]
 
 ** Notes
 
