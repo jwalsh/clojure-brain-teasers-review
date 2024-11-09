@@ -29,10 +29,9 @@
 
 (defn default-comparator-test []
   "Uses Clojure's default comparator to compare values of various types. 
-   Expected output: results of comparisons or a type error."
+   Expected output: results of comparisons."
   [(compare :a :b)
-   (compare 1 2)
-   (compare 1 :a)])
+   (compare 1 2)])
 
 (defn total-compare [x y]
   "Comparator that converts values to strings before comparing."
