@@ -1,7 +1,7 @@
 (ns collections.off-record)
 
-(defrecord Album [name artist]
-  "A record representing a musical album with a name and artist.")
+;; A record representing a musical album with a name and artist
+(defrecord Album [name artist])
 
 (def news-of-the-world
   "Instance of Album for Queen's 'News of the World.'"
