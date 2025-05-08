@@ -1,0 +1,8 @@
+{:output {:pattern "[::] {{file}}:{{row}}:{{col}}: {{message}}"}
+ :linters {:unresolved-symbol {:level :off} 
+          :unused-binding {:level :off}
+          :unused-namespace {:level :off}
+          :consistent-alias {:level :off}
+          :misplaced-docstring {:level :off}
+          :invalid-arity {:level :warning}
+          :uninitialized-var {:level :warning}}}

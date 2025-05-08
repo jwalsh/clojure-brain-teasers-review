@@ -67,11 +67,9 @@
 (defn type-hints-usage
   "Shows type hints as metadata"
   []
-  (let [s "hello"
-        n 42]
-    {:string-meta (meta (with-meta 'field {:tag String}))
-     :long-meta (meta (with-meta 'num {:tag Long}))
-     :private-meta (meta (with-meta 'x {:private true}))}))
+  {:string-meta (meta (with-meta 'field {:tag String}))
+   :long-meta (meta (with-meta 'num {:tag Long}))
+   :private-meta (meta (with-meta 'x {:private true}))})
 
 (comment
   ;; REPL experiments

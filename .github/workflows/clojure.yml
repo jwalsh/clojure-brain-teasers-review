@@ -1,0 +1,44 @@
+name: Clojure CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install clj-kondo
+        run: npm install -g clj-kondo
+      - name: Create clj-kondo config
+        run: |
+          mkdir -p .clj-kondo
+          echo '{:output {:pattern "[::] {{file}}:{{row}}:{{col}}: {{message}}"}
+                 :linters {:unresolved-symbol {:level :off} 
+                          :unused-binding {:level :off}
+                          :unused-namespace {:level :off}
+                          :consistent-alias {:level :off}
+                          :misplaced-docstring {:level :off}
+                          :invalid-arity {:level :warning}
+                          :uninitialized-var {:level :warning}}}' > .clj-kondo/config.edn
+      - name: Run linter
+        run: clj-kondo --lint src test
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Install Clojure tools
+        uses: DeLaGuardo/setup-clojure@11.0
+        with:
+          cli: 1.11.1.1347
+      - name: Run tests
+        run: clojure -M:test

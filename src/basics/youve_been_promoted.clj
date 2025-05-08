@@ -57,12 +57,12 @@
 (defn numerical-edge-cases
   "Shows edge cases in Clojure's numeric system"
   []
-  [(= ## Inf (/ 1.0 0.0))   ;; Infinity
-   (= ## -Inf (/ -1.0 0.0)) ;; Negative infinity
-   (= ## NaN (/ 0.0 0.0))   ;; Not a number
-   (== ## NaN ## NaN)       ;; NaN never equals itself
-   (= 3 3.0)                ;; Different types, not equal with =
-   (== 3 3.0)])             ;; Numeric equality with ==
+  [(= Double/POSITIVE_INFINITY (/ 1.0 0.0))   ;; Infinity
+   (= Double/NEGATIVE_INFINITY (/ -1.0 0.0))  ;; Negative infinity
+   (= Double/NaN (/ 0.0 0.0))                ;; Not a number
+   (== Double/NaN Double/NaN)                ;; NaN never equals itself
+   (= 3 3.0)                                 ;; Different types, not equal with =
+   (== 3 3.0)])                              ;; Numeric equality with ==
 
 (comment
   ;; REPL experiments showing overflow behavior
