@@ -27,5 +27,10 @@ pom.xml.asc
 # OS
 .DS_Store
 Thumbs.db
-clojure-brain-teasers_B2.0.pdf
+clojure-brain-teasers_*.pdf
 
+# Downloaded resources
+downloads/*.zip
+extracted/code/
+
+**/.claude/settings.local.json
