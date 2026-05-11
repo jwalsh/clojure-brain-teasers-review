@@ -1,0 +1,129 @@
+#+TITLE: Clojure Brain Teasers Review - Project Specification
+#+AUTHOR: J Walsh
+#+DATE: [2026-05-11 Mon]
+#+OPTIONS: toc:2 num:t ^:nil
+#+STARTUP: showall
+
+* Purpose
+
+This repository is a comprehensive review and educational companion for
+"Clojure Brain Teasers" by Alex Miller and Lorilyn Jordan Miller. It provides
+working solutions, tests, and extended exploration of the 25 puzzles from the
+book, plus original teasers covering emerging Clojure/ClojureScript features.
+
+* Goals
+
+** Primary Goals
+1. *Working implementations* for all 25 book puzzles with clear namespaces
+2. *Test coverage* for every puzzle demonstrating the expected (and surprising) behaviors
+3. *Extended teasers* beyond the book, covering ClojureScript and new language features
+4. *Literate documentation* in org-mode for interactive exploration via CIDER/org-babel
+
+** Secondary Goals
+- Serve as a reference for Clojure edge cases and gotchas
+- Provide a reproducible development environment (Nix, deps.edn)
+- Maintain CI quality gates (lint, test, format)
+
+* Scope
+
+** In Scope
+- Puzzles 1-25 from the book (Basics, Collections, Evaluation, Runtime)
+- ClojureScript-specific teasers (async/await, refer-global, JS interop)
+- Test suite with minimum 3 assertions per function
+- Org-mode interactive learning documents
+- Build automation via Makefile (gmake)
+- CI pipelines via GitHub Actions
+
+** Out of Scope
+- Full book text reproduction (copyright)
+- Production library code
+- ClojureScript build tooling (shadow-cljs, figwheel) -- teasers are conceptual
+
+* Architecture
+
+** Puzzle Categories
+
+| Category      | Puzzles | Source Dir         | Topics                           |
+|---------------+---------+--------------------+----------------------------------|
+| Basics        |     1-5 | src/basics/        | Equality, truthiness, types      |
+| Collections   |    6-11 | src/collections/   | conj, sort, records, sets        |
+| Evaluation    |   12-17 | src/evaluation/    | Threading, quoting, metadata     |
+| Runtime       |   18-25 | src/runtime/       | Vars, multimethods, namespaces   |
+| ClojureScript |     26+ | src/clojurescript/ | async/await, JS interop, Promise |
+
+** File Conventions
+- Source: ~src/<category>/<puzzle_name>.clj~
+- Test: ~test/<category>/<puzzle_name>_test.clj~
+- Namespace: ~<category>.<puzzle-name>~ (kebab-case)
+- File name: ~<puzzle_name>.clj~ (snake_case)
+
+** Dependencies
+- ~org.clojure/clojure~ 1.11.1 (JVM puzzles)
+- ~org.clojure/clojurescript~ 1.12.145+ (async teasers)
+- ~cognitect-labs/test-runner~ (test execution)
+- ~clj-kondo~ (static analysis)
+- ~cljfmt~ (formatting)
+
+* Quality Gates
+
+** Tests
+- Every puzzle source file has a corresponding test file
+- Minimum 3 assertions per function
+- Tests document both expected and surprising behavior
+- ~gmake test~ passes in CI
+
+** Linting
+- ~clj-kondo~ with project config (~.clj-kondo/config.edn~)
+- ~gmake lint~ passes in CI
+
+** Formatting
+- ~cljfmt~ enforced style
+- ~gmake fmt~ to auto-fix
+
+** CI Pipeline
+- GitHub Actions on push and PR
+- Runs: lint, test
+- See ~.github/workflows/~
+
+* Milestones
+
+| Milestone                        | Status      | Notes                              |
+|----------------------------------+-------------+------------------------------------|
+| Basics puzzles (1-5)             | Complete    | 5/5 tests, 100% coverage          |
+| Collections puzzles (6-11)       | In progress | 4/6 tests complete                 |
+| Evaluation puzzles (12-17)       | Pending     |                                    |
+| Runtime puzzles (18-25)          | Pending     |                                    |
+| ClojureScript async teasers      | In progress | T1-T9 candidates, serial vs parallel await |
+| Research note published           | Pending     | www.wal.sh/research/               |
+
+* ClojureScript Extension: Async Teasers
+
+The ClojureScript 1.12.145 release introduced ~^:async~ / ~await~ as
+first-class constructs. This creates a new category of brain teasers
+around async semantics that don't exist in JVM Clojure.
+
+** Teaser Candidates (prioritized)
+
+1. *Serial vs parallel await in let* (T1) -- ~let~ bindings force sequential
+   awaits even when they look independent. ~200ms vs ~100ms.
+2. *await is not a function* (T3) -- ~(map await ps)~ fails because ~await~
+   is a special form, not a value.
+3. *Async test that passes by accident* (T4) -- promise returned but never
+   awaited by test runner; ~is~ fires after test reports success.
+4. *binding does not survive await* (T5) -- dynamic bindings lost across
+   microtask boundaries.
+5. *swap! across await race* (T6) -- single-threaded != race-free when
+   suspension points exist.
+
+** Selection Criteria
+- Must be verifiable against ClojureScript 1.12.145 compiler output
+- Must have a clear "trick" that surprises experienced Clojure developers
+- Must not depend on compiler bugs likely to be fixed
+
+* References
+
+- Book: https://pragprog.com/titles/mmclobrain
+- Code archive: https://media.pragprog.com/titles/mmclobrain/code/mmclobrain-code.zip
+- Book resources: https://devtalk.com/books/clojure-brain-teasers/
+- ClojureScript 1.12.145 release: https://clojurescript.org/news/2026-05-07-release
+- P1.0 release: 2025-02-27

@@ -19,13 +19,31 @@ This repository contains notes and examples from working through the puzzles in 
 .
 ├── LICENSE
 ├── README.org
-├── deps.edn
-├── Makefile
-└── src/
-    ├── basics/         # Puzzles 1-5 
-    ├── collections/    # Puzzles 6-11
-    ├── evaluation/     # Puzzles 12-17
-    └── runtime/        # Puzzles 18-25
+├── spec.org                  # Project goals and specification
+├── deps.edn                  # Dependency configuration
+├── Makefile                   # Build automation (gmake)
+├── shell.nix                  # Nix development environment
+├── .clj-kondo/                # Linter configuration
+├── .github/workflows/         # CI/CD pipelines
+├── scripts/                   # Utility scripts
+├── doc/
+│   ├── learning-clojure-puzzles.org
+│   ├── KNOWLEDGE_MAP.org
+│   ├── RELEASES.md
+│   ├── TEST_PROGRESS.md
+│   └── development/           # Style guide and resources
+├── src/
+│   ├── basics/                # Puzzles 1-5
+│   ├── collections/           # Puzzles 6-11
+│   ├── evaluation/            # Puzzles 12-17
+│   ├── runtime/               # Puzzles 18-25
+│   └── clojurescript/         # ClojureScript-specific teasers
+└── test/                      # Mirrors src/ structure
+    ├── basics/
+    ├── collections/
+    ├── evaluation/
+    ├── runtime/
+    └── clojurescript/
 #+end_src
 
 ** Development Workflow
@@ -208,11 +226,9 @@ chmod +x .githooks/*
 #+end_src
 
 *** Version Requirements
-#+begin_src clojure :tangle deps.edn :mkdirp yes
-{:min-versions
- {"org.clojure/clojure" "1.11.1"
-  "org.clojure/tools.deps" "0.16.1281"}}
-#+end_src
+- Clojure 1.11.1+
+- tools.deps 0.16.1281+
+- ClojureScript 1.12.145+ (for async teasers)
 
 *** Community Resources
 - [[https://clojure.org/guides/deps_and_cli][Clojure CLI Guide]]

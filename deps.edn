@@ -4,7 +4,7 @@
         org.clojure/tools.namespace {:mvn/version "1.4.4"}
         io.github.cognitect-labs/test-runner
         {:git/url "https://github.com/cognitect-labs/test-runner.git"
-         :sha "OLD-SHA"}}
+         :sha "9d36f36ff541dac680a05010e4348c744333f191"}}
  :aliases
  {:test
   {:extra-deps {org.clojure/tools.namespace {:mvn/version "1.5.0"}
