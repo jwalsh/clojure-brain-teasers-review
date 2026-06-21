@@ -12,7 +12,7 @@ pom.xml.asc
 .lein-repl-history
 .lein-plugins/
 .lein-failures
-.nrepl-port
+# .nrepl-port is committed at a fixed port (42527) — see Makefile `nrepl` target.
 .cpcache/
 .clj-kondo/.cache
 .lsp/.cache
