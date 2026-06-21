@@ -1,0 +1,9 @@
+;; ClojureScript build config for the clojurescript/ async-await teasers.
+;; Classpath comes from deps.edn via the :cljs alias.
+;; Run tests:  gmake cljs-test   (or: cider-jack-in-cljs -> shadow -> :test)
+{:deps  {:aliases [:cljs]}
+ :builds
+ {:test {:target    :node-test
+         :output-to "target/node-tests.js"
+         :ns-regexp "-test$"
+         :autorun   false}}}

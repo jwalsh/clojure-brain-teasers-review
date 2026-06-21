@@ -8,7 +8,12 @@ RESET     := \033[0m
 SRC_DIRS  := basics collections evaluation runtime
 PDF       := clojure-brain-teasers_B2.0.pdf
 
-.PHONY: all clean test repl lint fmt init deps check help cover qr default build outdated
+# nREPL/CIDER: fixed, committed port so `M-x cider-connect-clj` is one step.
+# Keep on localhost so an agent-spawned process can reach it.
+NREPL_PORT ?= 42527
+NREPL_BIND ?= 127.0.0.1
+
+.PHONY: all clean test cljs-test repl nrepl nrepl-stop lint fmt init deps check help cover qr default build outdated
 
 default: help ## Show help
 
@@ -19,24 +24,40 @@ build: test ## Build the project (runs tests)
 
 clean: ## Clean all build artifacts
 	@echo "$(YELLOW)Cleaning project...$(RESET)"
-	@rm -rf target .cpcache .clj-kondo/.cache .lsp/.cache book-cover.png qr-code.png
+	@rm -rf target .cpcache .clj-kondo/.cache .lsp/.cache .shadow-cljs book-cover.png qr-code.png
 	@echo "$(GREEN)Clean completed$(RESET)"
 
 test: ## Run tests
 	@echo "$(YELLOW)Running tests...$(RESET)"
 	@clj -M:test
 
+cljs-test: ## Compile and run the ClojureScript tests under node
+	@echo "$(YELLOW)Compiling ClojureScript tests...$(RESET)"
+	@clojure -M:cljs -m shadow.cljs.devtools.cli compile test
+	@node target/node-tests.js
+
 repl: ## Start a REPL
 	@echo "$(YELLOW)Starting REPL...$(RESET)"
 	@clj -M:repl
 
+nrepl: ## Start nREPL + CIDER middleware on $(NREPL_PORT) (cider-connect-clj)
+	@if lsof -i :$(NREPL_PORT) >/dev/null 2>&1; then echo "$(GREEN)nREPL already up on $(NREPL_PORT)$(RESET)"; else \
+	  echo "$(YELLOW)Starting nREPL on $(NREPL_BIND):$(NREPL_PORT)...$(RESET)"; \
+	  clojure -A:repl -M -m nrepl.cmdline \
+	    --bind $(NREPL_BIND) --port $(NREPL_PORT) \
+	    --middleware '["cider.nrepl/cider-middleware"]'; fi
+
+nrepl-stop: ## Stop the nREPL on $(NREPL_PORT)
+	@pid=$$(lsof -ti :$(NREPL_PORT) 2>/dev/null); \
+	if [ -n "$$pid" ]; then kill $$pid && echo "$(GREEN)Stopped nREPL on $(NREPL_PORT)$(RESET)"; else echo "$(YELLOW)nREPL not running$(RESET)"; fi
+
 lint: ## Run the linter
 	@echo "$(YELLOW)Running linter...$(RESET)"
-	@clj -M:dev clj-kondo --lint src test
+	@clj -M:clj-kondo --lint src test
 
 fmt: ## Format the code
 	@echo "$(YELLOW)Formatting code...$(RESET)"
-	@clj -M:dev cljfmt fix
+	@clj -M:cljfmt fix
 
 outdated: ## Check for outdated dependencies
 	@echo "$(YELLOW)Checking for outdated dependencies...$(RESET)"
