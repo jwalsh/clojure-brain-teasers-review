@@ -18,6 +18,10 @@ pom.xml.asc
 .lsp/.cache
 .clj-kondo/
 
+# ClojureScript / shadow-cljs
+.shadow-cljs/
+node_modules/
+
 # IDE
 .idea/
 *.iml

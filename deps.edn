@@ -17,6 +17,12 @@
                  :git/sha "dfb30dd6605cb6c0efc275e1df1736f6e90d4d73"}}
    :main-opts ["-m" "cognitect.test-runner"]}
 
+  ;; ClojureScript — for the clojurescript/ async-await teasers.
+  ;; Run cljs tests under node via shadow-cljs (see Makefile cljs-test).
+  :cljs
+  {:extra-deps {org.clojure/clojurescript {:mvn/version "1.12.145"}
+                thheller/shadow-cljs       {:mvn/version "3.4.11"}}}
+
   ;; Static analysis and linting
   :clj-kondo
   {:extra-deps {clj-kondo/clj-kondo {:mvn/version "RELEASE"}}

@@ -13,7 +13,7 @@ PDF       := clojure-brain-teasers_B2.0.pdf
 NREPL_PORT ?= 42527
 NREPL_BIND ?= 127.0.0.1
 
-.PHONY: all clean test repl nrepl nrepl-stop lint fmt init deps check help cover qr default build outdated
+.PHONY: all clean test cljs-test repl nrepl nrepl-stop lint fmt init deps check help cover qr default build outdated
 
 default: help ## Show help
 
@@ -24,12 +24,17 @@ build: test ## Build the project (runs tests)
 
 clean: ## Clean all build artifacts
 	@echo "$(YELLOW)Cleaning project...$(RESET)"
-	@rm -rf target .cpcache .clj-kondo/.cache .lsp/.cache book-cover.png qr-code.png
+	@rm -rf target .cpcache .clj-kondo/.cache .lsp/.cache .shadow-cljs book-cover.png qr-code.png
 	@echo "$(GREEN)Clean completed$(RESET)"
 
 test: ## Run tests
 	@echo "$(YELLOW)Running tests...$(RESET)"
 	@clj -M:test
+
+cljs-test: ## Compile and run the ClojureScript tests under node
+	@echo "$(YELLOW)Compiling ClojureScript tests...$(RESET)"
+	@clojure -M:cljs -m shadow.cljs.devtools.cli compile test
+	@node target/node-tests.js
 
 repl: ## Start a REPL
 	@echo "$(YELLOW)Starting REPL...$(RESET)"
