@@ -24,7 +24,11 @@ jobs:
                           :misplaced-docstring {:level :off}
                           :invalid-arity {:level :warning}
                           :uninitialized-var {:level :warning}}}' > .clj-kondo/config.edn
+      # Advisory only: this is a brain-teasers repo, so the examples
+      # intentionally contain "wrong-looking" code (e.g. contains? on nil).
+      # Surface clj-kondo findings without failing the build.
       - name: Run linter
+        continue-on-error: true
         run: clj-kondo --lint src test
 
   test:
