@@ -226,7 +226,7 @@ chmod +x .githooks/*
 #+end_src
 
 *** Version Requirements
-- Clojure 1.11.1+
+- Clojure 1.13.0-alpha8 (pinned in =deps.edn=; the destructuring teasers and the 1.13 answer to Abracordabra need it)
 - tools.deps 0.16.1281+
 - ClojureScript 1.12.145+ (for async teasers)
 
