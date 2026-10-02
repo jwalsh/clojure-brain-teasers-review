@@ -5,7 +5,7 @@ YELLOW    := \033[33m
 RESET     := \033[0m
 
 # Project structure
-SRC_DIRS  := basics collections evaluation runtime
+SRC_DIRS  := basics collections evaluation runtime destructuring
 PDF       := clojure-brain-teasers_B2.0.pdf
 
 # nREPL/CIDER: fixed, committed port so `M-x cider-connect-clj` is one step.

@@ -50,6 +50,7 @@ book, plus original teasers covering emerging Clojure/ClojureScript features.
 | Evaluation    |   12-17 | src/evaluation/    | Threading, quoting, metadata     |
 | Runtime       |   18-25 | src/runtime/       | Vars, multimethods, namespaces   |
 | ClojureScript |     26+ | src/clojurescript/ | async/await, JS interop, Promise |
+| Destructuring |   extra | src/destructuring/ | 1.13 :or scope, :select, :excess, selector |
 
 ** File Conventions
 - Source: ~src/<category>/<puzzle_name>.clj~
@@ -58,7 +59,7 @@ book, plus original teasers covering emerging Clojure/ClojureScript features.
 - File name: ~<puzzle_name>.clj~ (snake_case)
 
 ** Dependencies
-- ~org.clojure/clojure~ 1.11.1 (JVM puzzles)
+- ~org.clojure/clojure~ 1.13.0-alpha8 (JVM puzzles; an alpha, pinned for the 1.13 destructuring teasers)
 - ~org.clojure/clojurescript~ 1.12.145+ (async teasers)
 - ~cognitect-labs/test-runner~ (test execution)
 - ~clj-kondo~ (static analysis)
