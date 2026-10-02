@@ -111,8 +111,10 @@ around async semantics that don't exist in JVM Clojure.
    is a special form, not a value.
 3. *Async test that passes by accident* (T4) -- promise returned but never
    awaited by test runner; ~is~ fires after test reports success.
-4. *binding does not survive await* (T5) -- dynamic bindings lost across
-   microtask boundaries.
+4. *binding leaks across await* (T5) -- a binding is still in place after an
+   ~await~ inside it, and is visible to unrelated code while the function is
+   suspended. The first version of this teaser claimed the binding was lost;
+   the compiled code showed otherwise.
 5. *swap! across await race* (T6) -- single-threaded != race-free when
    suspension points exist.
 
