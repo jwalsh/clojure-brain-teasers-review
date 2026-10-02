@@ -1,7 +1,7 @@
 (ns clojurescript.serial-await-test
   "Tests for ClojureScript async/await brain teasers.
    Requires ClojureScript 1.12.145+ with ^:async support."
-  (:require [cljs.test :refer [deftest testing is async]]
+  (:require [cljs.test :refer [deftest testing is]]
             [clojurescript.serial-await :as sut]))
 
 ;; -- T1: Serial vs Parallel timing ------------------------------------
@@ -41,11 +41,18 @@
       (is (= [10 20 30] (js->clj result))
           "each promise resolves to its delay value"))))
 
-;; -- T5: binding lost across await ------------------------------------
+;; -- T5: binding across await ----------------------------------------
 
-(deftest ^:async binding-lost-across-await
-  (testing "dynamic bindings do not survive across await suspension"
+(deftest ^:async binding-survives-await-inside-the-frame
+  (testing "await inside binding suspends without running the finally"
     (let [result (await (sut/binding-across-await))]
-      (is (nil? result)
-          "*ctx* should be nil after await, not :active --
-           binding is popped when the async frame suspends"))))
+      (is (= :active result)
+          "*ctx* is still bound when the function resumes"))))
+
+(deftest ^:async binding-leaks-to-other-code-during-await
+  (testing "code outside the binding form sees the bound value while the function is suspended"
+    (let [result (await (sut/binding-leaks-during-await))]
+      (is (= :active (:during result))
+          "an unrelated reader sees the binding during the suspension")
+      (is (nil? (:after result))
+          "the var is restored once the function has finished"))))

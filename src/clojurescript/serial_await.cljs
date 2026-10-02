@@ -67,18 +67,38 @@
 ;; (deftest ^:async correct
 ;;   (is (= [100 100] (await (fetch-two-serial)))))
 
-;; -- Teaser 5: binding does not survive await --------------------------
-;; Dynamic bindings are implemented as try/finally push-pop.  The async
-;; desugar splits the body across event-loop ticks, so the binding is
-;; popped before the code after `await` runs.
+;; -- Teaser 5: binding across await ----------------------------------
+;; `binding` compiles to: set the var, try the body, finally restore it.
+;; An ^:async function compiles to a JavaScript async function, and an
+;; `await` inside a try block suspends the function without running the
+;; finally clause. So the binding is still in place when the function
+;; resumes.
+;;
+;; The surprise is the other direction. ClojureScript has one thread and a
+;; dynamic var is a single global slot. While the function is suspended,
+;; the slot still holds the bound value, and every other piece of code the
+;; event loop runs in the meantime sees it.
 
 (def ^:dynamic *ctx* nil)
 
 (defn ^:async binding-across-await
-  "Demonstrates that dynamic bindings are lost across await boundaries.
-   Returns nil, not :active -- the binding is popped when the async
-   frame suspends at await."
+  "Reads *ctx* after an await inside a binding. Returns :active: the
+   binding is restored only when the body finishes, and it has not."
   []
   (binding [*ctx* :active]
-    (await (slow-promise 10))
+    (await (slow-promise 20))
     *ctx*))
+
+(defn ^:async binding-leaks-during-await
+  "Starts `binding-across-await`, and while it is suspended reads *ctx*
+   from code that is outside the binding form. Returns what that code saw
+   during the suspension, and what it sees once the function has finished.
+
+   Returns {:during :active, :after nil}: the binding leaked to an
+   unrelated reader for as long as the function was suspended."
+  []
+  (let [suspended (binding-across-await)
+        during (await (js/Promise. (fn [resolve]
+                                     (js/setTimeout #(resolve *ctx*) 5))))]
+    (await suspended)
+    {:during during :after *ctx*}))
